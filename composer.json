@@ -1,0 +1,25 @@
+{
+    "name": "pallo/app.filebrowser",
+    "description": "Zibo module to add a file browser to your application.",
+    "version": "0.7.0",
+    "type": "pallo-module",
+    "authors": [
+        {
+            "name": "Joris Vandeweerd",
+            "email": "joris@statik.be"
+        }
+    ],
+    "require": {
+        "zibo/app": "*",
+        "zibo/composer.installer": "*",
+        "zibo/core": "*",
+        "zibo/html": "*",
+        "zibo/i18n": "*",
+        "zibo/jquery": "*",
+        "zibo/template": "*",
+        "zibo/validation": "*"
+    },
+    "suggest": {
+        "zibo/archive": "Download directory contents as archives."
+    }
+}
