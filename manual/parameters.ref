@@ -1,0 +1,2 @@
+filebrowser.extension.%extension%       Extension which is editable.
+filebrowser.path.default                Default root directory of the filebrowser. When not set, public/upload will be used.

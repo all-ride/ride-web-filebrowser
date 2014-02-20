@@ -1,0 +1,16 @@
+{
+    "filebrowser.extension": {
+        "css": "css",
+        "htaccess": "htaccess",
+        "htm": "htm",
+        "html": "html",
+        "ini": "ini",
+        "js": "js",
+        "json": "json",
+        "md": "md",
+        "php": "php",
+        "tpl": "tpl",
+        "txt": "txt",
+        "xml": "xml"
+    }
+}

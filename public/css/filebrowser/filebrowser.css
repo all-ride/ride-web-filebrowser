@@ -1,0 +1,42 @@
+#form-editor-content {
+    height: 300px;
+    width: 100%;
+}
+
+#fileBrowser table td div.name {
+    background-repeat: no-repeat;
+    height: 20px;
+    padding-left: 20px;
+}
+
+#fileBrowser table td div.directory {
+    background-image: url(../../img/filebrowser/directory.png);
+}
+
+#fileBrowser table td div.file {
+    background-image: url(../../img/filebrowser/file.png);
+}
+
+#fileBrowser table td div.broken {
+    background-image: url(../../img/filebrowser/broken.png);
+}
+
+#fileBrowser table td div.info span {
+    display: block;
+}
+
+.clipboard form.table div.actions {
+	width: 100%;
+}
+
+.clipboard form.table div.actions input {
+    margin: 4px;
+}
+
+.breadcrumb{
+    margin-left: 25%;
+}
+
+.form-control{
+    height: 300px;
+}
