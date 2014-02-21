@@ -1179,7 +1179,7 @@ class FileBrowserController extends AbstractController
 
         foreach($files as $file) {
             //$file = new File($file);
-            $file = $this->getRoot()->getPath($file); var_dump($file);exit;
+            $file = $this->getRoot()->getPath($file);
             $path = $file->getAbsolutePath();
 
             if(!array_key_exists($path, $this->clipboard)) {
