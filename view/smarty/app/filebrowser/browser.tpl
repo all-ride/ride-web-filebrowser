@@ -1,4 +1,5 @@
 {extends file="base/index.sidebar"}
+
 {block name="content" append}
 <h1>{translate key="filebrowser.title"}</h1>
 <div id="fileBrowser">

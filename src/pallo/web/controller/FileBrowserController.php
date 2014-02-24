@@ -310,8 +310,11 @@ class FileBrowserController extends AbstractController {
      */
     protected $routes;
 
+    /**
+     * Instances of Form (formbuilder)
+     * @var $form
+     */
     protected $form;
-
     protected $clipboardForm;
 
     /**
@@ -549,7 +552,6 @@ class FileBrowserController extends AbstractController {
 
             try {
                 $upload->validate();
-                // $data = $upload->getData();
 
                 $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . ($path ? '/' . $path : '');
                 $this->response->setRedirect($redirectUrl);
@@ -682,34 +684,28 @@ class FileBrowserController extends AbstractController {
                 $formdata = $form->getData();
                 $name = $formdata["name"];
 
-                $newPath = $this->getRoot()->getPath($absolutePath);
+                $newPath = $absolutePath->getChild($name);
 
-                mkdir($absolutePath . '/' . $name, 0777);
-
-                //$newPath = $newPath->getCopyFile();
-                //$newPath->create();
+                $newPath = $newPath->getCopyFile();
+                $newPath->create();
 
                 $this->addSuccess(self::TRANSLATION_SUCCESS_CREATED, array('path' => $this->fileBrowser->getPath($newPath, false)));
 
-                $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . ($path ? '/' . $path : '');
-                $this->response->setRedirect($redirectUrl);
-
-                return;
             } catch(ValidationException $e) {
                 $this->response->setStatusCode(Response::STATUS_CODE_BAD_REQUEST);
 
             } catch(Exception $exception) {
-                /*   $log = $this->zibo->getLog();
-                   if ($log) {
-                       $log->logException($exception);
-                   }
 
-                   $this->addError(self::TRANSLATION_ERROR, array('error' => $exception->getMessage()));
-   */
                 $this->response->setStatusCode(Response::STATUS_CODE_SERVER_ERROR);
-                $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . ($this->path ? '/' . $this->path : '');
-                $this->response->setRedirect($redirectUrl);
+
             }
+
+
+            foreach($tokens as $token){
+                $path = $token .'/';
+            }
+            $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . '/' .$path;
+            $this->response->setRedirect($redirectUrl);
         }
 
         if (!$absolutePath->isWritable()) {
@@ -718,9 +714,7 @@ class FileBrowserController extends AbstractController {
             $form->setIsDisabled(true, DirectoryForm::BUTTON_SUBMIT);
         }
 
-
         $translator = $this->getTranslator();
-
     }
     /**
      * Action to rename a file or directory
@@ -821,11 +815,7 @@ class FileBrowserController extends AbstractController {
         }
 
         $translator = $this->getTranslator();
-
-
     }
-
-
     /**
      * Action to edit or create a file
      *
@@ -872,19 +862,17 @@ class FileBrowserController extends AbstractController {
         $isWritable = $absolutePath->isWritable();
 
         $data = array(
-
             'path' => $path,
             'content' => $content,
             'name' => $name,
-
         );
 
         $form = $this->createFormBuilder($data);
 
         $form->addRow('path', 'label', array(
             'path' => $absolutePath,
-
         ));
+
         $form->addRow('name', 'string', array(
             'type' => 'label',
             'options' => array(
@@ -894,6 +882,7 @@ class FileBrowserController extends AbstractController {
                 'required' => array(),
             ),
         ));
+
         $form->addRow('content', 'text', array(
             'type' => 'text',
             'options' => array(
@@ -903,6 +892,7 @@ class FileBrowserController extends AbstractController {
                 'required' => array(),
             )
         ));
+
         $form->setRequest($this->request);
         $form = $form->build();
 
@@ -915,16 +905,23 @@ class FileBrowserController extends AbstractController {
                 $form->validate();
 
                 if($file->isDirectory()){
-
                     $newfile  = $file->getChild($name);
                     $newfile->write($content);
                     $this->addSuccess(self::TRANSLATION_CREATE_FILE, array('path' => $this->fileBrowser->getPath($file, false)));
+
+                    foreach($tokens as $token){
+                        $path = $token .'/';
+                    }
                 }
 
                elseif($file->isWritable()) {
                     $file->write($content);
                     $this->addSuccess(self::TRANSLATION_SUCCESS_SAVED, array('path' => $this->fileBrowser->getPath($file, false)));
 
+                   array_pop($tokens);
+                   foreach($tokens as $token){
+                       $path = $token .'/';
+                   }
                 }
                 else {
                     $this->addError(self::TRANSLATION_ERROR_WRITABLE, array('path' => $this->fileBrowser->getPath($file, false)));
@@ -936,23 +933,19 @@ class FileBrowserController extends AbstractController {
             } catch(Exception $exception) {
 
                 $this->addError(self::TRANSLATION_ERROR_WRITABLE, array('error' => $exception->getMessage()));
-
                 $this->response->setStatusCode(Response::STATUS_CODE_SERVER_ERROR);
             }
 
-            $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) ;
+            $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . '/' . $path;
             $this->response->setRedirect($redirectUrl);
 
             if(!$isWritable) {
                 $this->addWarning(self::TRANSLATION_ERROR_WRITABLE, array('path' => $path . ($name ? '/' . $name : '')));
             }
-
-
         }
 
         $view = $this->setTemplateView("app/filebrowser/editor", array(
             'form' => $form->getView(),
-
         ));
 
     }
@@ -992,10 +985,10 @@ class FileBrowserController extends AbstractController {
             }
 
             $path = $this->fileBrowser->getPath($file, false)->getPath();
+
             if(array_key_exists($path, $this->clipboard)) {
                 unset($this->clipboard[$path]);
             }
-
             $this->addSuccess(self::TRANSLATION_SUCCESS_DELETED, array('path' => $path));
         }
 
@@ -1008,7 +1001,6 @@ class FileBrowserController extends AbstractController {
 
         $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . '/' . $path;
         $this->response->setRedirect($redirectUrl);
-
     }
 
     /**
@@ -1073,7 +1065,6 @@ class FileBrowserController extends AbstractController {
             }
 
             $file = $this->fileBrowser->getPath($file, false);
-
             $this->clipboard[$file->getName()] = $file;
         }
     }
@@ -1090,7 +1081,6 @@ class FileBrowserController extends AbstractController {
         }
 
         foreach($files as $file) {
-
 
             if(array_key_exists($file, $this->clipboard)) {
                 unset($this->clipboard[$file]);
@@ -1146,9 +1136,7 @@ class FileBrowserController extends AbstractController {
                 continue;
             }
 
-
             $source = $this->root->getChild($this->clipboard[$file]);
-
 
             if (!$destination->isWritable()) {
                 $this->addError(self::TRANSLATION_ERROR_WRITABLE, array('path' => $this->fileBrowser->getPath($destination)));
@@ -1156,7 +1144,6 @@ class FileBrowserController extends AbstractController {
             }
 
             $source->$action($destination);
-
             unset($this->clipboard[$file]);
         }
 
@@ -1203,7 +1190,6 @@ class FileBrowserController extends AbstractController {
 
         if(interface_exists('pallo\\library\\archive\\Archive')) {
             $table->addAction($translator->translate(self::TRANSLATION_DOWNLOAD_ARCHIVE), array($this, 'archive'));
-
         }
         $table->addAction($translator->translate(self::TRANSLATION_CLIPBOARD_COPY), array($this, 'clipboardAdd'));
         $table->addAction($translator->translate(self::TRANSLATION_DELETE), array($this, 'delete'), $translator->translate(self::TRANSLATION_CONFIRM_DELETE));
