@@ -32,8 +32,7 @@ use \Exception;
 /**
  * Controller of the file browser application
  */
-class FileBrowserController extends AbstractController
-{
+class FileBrowserController extends AbstractController {
 
     /**
      * Route to create a directory
@@ -311,7 +310,6 @@ class FileBrowserController extends AbstractController
      */
     protected $routes;
 
-
     protected $form;
 
     protected $clipboardForm;
@@ -320,8 +318,7 @@ class FileBrowserController extends AbstractController
      * Constructs a new file browser controller
      * @return null
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->root = null;
         $this->path = null;
         $this->fileBrowser = null;
@@ -342,8 +339,7 @@ class FileBrowserController extends AbstractController
      * @param pallo\library\system\file\File $root
      * @return null
      */
-    public function setRoot(File $root)
-    {
+    public function setRoot(File $root) {
         $this->root = $root;
     }
 
@@ -351,8 +347,7 @@ class FileBrowserController extends AbstractController
      * Gets the root path of the browser
      * @return pallo\library\system\file\File
      */
-    public function getRoot()
-    {
+    public function getRoot() {
         return $this->root;
     }
 
@@ -362,8 +357,7 @@ class FileBrowserController extends AbstractController
      * @param string $route Id of the new route
      * @return null
      */
-    public function setRoute($action, $route)
-    {
+    public function setRoute($action, $route) {
         $this->routes[$action] = $route;
     }
 
@@ -372,8 +366,7 @@ class FileBrowserController extends AbstractController
      * @param string $prefix
      * @return null
      */
-    public function setRoutePrefix($prefix)
-    {
+    public function setRoutePrefix($prefix) {
         foreach($this->routes as $action => $route) {
             $this->routes[$action] = $prefix . $route;
         }
@@ -384,8 +377,7 @@ class FileBrowserController extends AbstractController
      * @param array $extensions
      * @return null
      */
-    public function setExtensions(array $extensions)
-    {
+    public function setExtensions(array $extensions) {
         $this->extensions = $extensions;
     }
 
@@ -393,8 +385,7 @@ class FileBrowserController extends AbstractController
      * Gets the extensions which are editable
      * @return array
      */
-    public function getExtensions()
-    {
+    public function getExtensions() {
         return $this->extensions;
     }
 
@@ -403,8 +394,7 @@ class FileBrowserController extends AbstractController
      * @param pallo\web\model\filebrowser\filter\Filter $filter
      * @return null
      */
-    public function addFilter(Filter $filter)
-    {
+    public function addFilter(Filter $filter) {
         $this->filters[] = $filter;
     }
 
@@ -412,8 +402,7 @@ class FileBrowserController extends AbstractController
      * Hook before every action, reads the clipboard and the current path
      * @return boolean True to invoke the action
      */
-    public function preAction()
-    {
+    public function preAction() {
 
         if(!$this->root) {
             $fileBrowser = $this->dependencyInjector->get('pallo\\library\\system\\file\\browser\\FileBrowser');
@@ -453,7 +442,6 @@ class FileBrowserController extends AbstractController
 
             $this->clipboard = $session->get(self::SESSION_CLIPBOARD, array());
         }
-
         return true;
     }
 
@@ -461,8 +449,7 @@ class FileBrowserController extends AbstractController
      * Hook after every action, stores the clipboard and the current path
      * @return null
      */
-    public function postAction()
-    {
+    public function postAction() {
         $session = $this->request->getSession();
         $session->set(self::SESSION_CLIPBOARD, $this->clipboard);
     }
@@ -471,8 +458,7 @@ class FileBrowserController extends AbstractController
      * Default action of the file browser
      * @return null
      */
-    public function indexAction(FileSystem $fileSystem)
-    {
+    public function indexAction(FileSystem $fileSystem) {
 
         return $this->pathAction($fileSystem);
     }
@@ -483,8 +469,7 @@ class FileBrowserController extends AbstractController
      * $fb->pathAction('application', 'config') would display application/config
      * @return null
      */
-    public function pathAction(FileSystem $fileSystem)
-    {
+    public function pathAction(FileSystem $fileSystem) {
         $tokens = func_get_args();
         array_shift($tokens);
 
@@ -505,13 +490,8 @@ class FileBrowserController extends AbstractController
             return;
         }
 
-        /*$pathAction = $this->getUrl($this->routes[self::ROUTE_PATH]);
-        $tableAction = $pathAction . ($path ? '/' . $this->fileBrowser->getPath($path, true) : '');
-*/
-
         $pathAction = $this->getUrl($this->routes[self::ROUTE_PATH]);
         $tableAction = $pathAction . ($path ? '/' . $path : '');
-        //$clipboardAction = $pathAction .($path ? '/' . $path : '');
 
         $downloadAction = $this->getUrl($this->routes[self::ROUTE_DOWNLOAD]) . ($path ? '/' . $path : '');
         $editAction = $this->getUrl($this->routes[self::ROUTE_EDIT]) . '/';
@@ -638,8 +618,7 @@ class FileBrowserController extends AbstractController
      * $fb->downloadAction('application', 'config', 'system.ini') would access application/config/system.ini
      * @return null
      */
-    public function downloadAction()
-    {
+    public function downloadAction() {
         $tokens = func_get_args();
         $file = $this->getFileFromTokens($tokens);
 
@@ -705,10 +684,10 @@ class FileBrowserController extends AbstractController
 
                 $newPath = $this->getRoot()->getPath($absolutePath);
 
-                //mkdir($absolutePath . '/' . $name, 0777);
+                mkdir($absolutePath . '/' . $name, 0777);
 
-                 $newPath = $newPath->getCopyFile();
-                $newPath->create();
+                //$newPath = $newPath->getCopyFile();
+                //$newPath->create();
 
                 $this->addSuccess(self::TRANSLATION_SUCCESS_CREATED, array('path' => $this->fileBrowser->getPath($newPath, false)));
 
@@ -728,22 +707,21 @@ class FileBrowserController extends AbstractController
                    $this->addError(self::TRANSLATION_ERROR, array('error' => $exception->getMessage()));
    */
                 $this->response->setStatusCode(Response::STATUS_CODE_SERVER_ERROR);
-                $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]);
+                $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . ($this->path ? '/' . $this->path : '');
                 $this->response->setRedirect($redirectUrl);
             }
         }
 
-          if (!$absolutePath->isWritable()) {
-              $this->addWarning(self::TRANSLATION_ERROR_WRITABLE, array('path' => $this->fileBrowser->getPath($path)));
+        if (!$absolutePath->isWritable()) {
+            $this->addWarning(self::TRANSLATION_ERROR_WRITABLE, array('path' => $this->fileBrowser->getPath($path)));
 
-              $form->setIsDisabled(true, DirectoryForm::BUTTON_SUBMIT);
-          }
+            $form->setIsDisabled(true, DirectoryForm::BUTTON_SUBMIT);
+        }
 
 
         $translator = $this->getTranslator();
 
     }
-
     /**
      * Action to rename a file or directory
      *
@@ -751,8 +729,7 @@ class FileBrowserController extends AbstractController
      * $fb->renameAction('application', 'data', 'test.txt') would rename to application/data/test.txt
      * @return null
      */
-    public function renameAction()
-    {
+    public function renameAction() {
         $tokens = func_get_args();
         $file = $this->getFileFromTokens($tokens, false);
         $path = $this->getRoot()->getChild($file);
@@ -809,16 +786,11 @@ class FileBrowserController extends AbstractController
                 echo 'submit';
 
                 $name = $dataform['newvalue'];
-                //$name = String::safeString($name);
-                //   $destination = new File($parent, $name);
                 $destination = $parent->getChild($dataform['newvalue']);
 
                 if($destination->getAbsolutePath() != $absoluteFile->getPath() && $destination->exists()) {
                     $error = new ValidationError(self::TRANSLATION_ERROR_EXIST, '%path% exists already', array('path' => $this->fileBrowser->getPath($destination, false)));
-
                     $exception = new ValidationException();
-                    // $exception->addErrors(RenameForm::FIELD_NAME, array($error));
-
                     throw $exception;
                 }
 
@@ -836,14 +808,6 @@ class FileBrowserController extends AbstractController
                 $this->response->setStatusCode(Response::STATUS_CODE_BAD_REQUEST);
 
             } catch(Exception $exception) {
-                /*   $log = $this->zibo->getLog();
-
-                    if ($log) {
-
-                        $log->logException($exception);
-
-                    }
-    */
 
                 $this->addError(self::TRANSLATION_ERROR_PATH_FILE, array('error' => $exception->getMessage()));
 
@@ -944,60 +908,45 @@ class FileBrowserController extends AbstractController
 
         if($form->isSubmitted()) {
             $formdata = $form->getData();
-
             $content = $formdata['content'];
             $name = $formdata['name'];
-            $path = $absolutePath->getParent();
+            $path = $absolutePath;
             try {
                 $form->validate();
 
+                if($file->isDirectory()){
 
-               if(!file_exists($path.'/'.$name)){
-                   $file = $name;
-                   $path = $this->getRoot()->getChild($file);var_dump($path);
-                   $new = fopen($path, 'x+');
-                   fwrite($new,$content);
-                   fclose($new);
+                    $newfile  = $file->getChild($name);
+                    $newfile->write($content);
+                    $this->addSuccess(self::TRANSLATION_CREATE_FILE, array('path' => $this->fileBrowser->getPath($file, false)));
+                }
 
-
-               }
-
-
-                elseif($file->isWritable()) {
+               elseif($file->isWritable()) {
                     $file->write($content);
                     $this->addSuccess(self::TRANSLATION_SUCCESS_SAVED, array('path' => $this->fileBrowser->getPath($file, false)));
-
 
                 }
                 else {
                     $this->addError(self::TRANSLATION_ERROR_WRITABLE, array('path' => $this->fileBrowser->getPath($file, false)));
-
                     $form->setIsDisabled(true, EditorForm::BUTTON_SUBMIT);
-
                     $isWritable = true;
                 }
-                $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]);
-                $this->response->setRedirect($redirectUrl);
             } catch(ValidationException $exception) {
                 $this->response->setStatusCode(Response::STATUS_CODE_BAD_REQUEST);
             } catch(Exception $exception) {
-                /*   $log = $this->pallo->getLog();
-                   if($log) {
-                       $log->logException($exception);
-                   }*/
 
-//            $this->addError(self::TRANSLATION_ERROR, array('error' => $exception->getMessage()));
+                $this->addError(self::TRANSLATION_ERROR_WRITABLE, array('error' => $exception->getMessage()));
 
                 $this->response->setStatusCode(Response::STATUS_CODE_SERVER_ERROR);
             }
 
+            $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) ;
+            $this->response->setRedirect($redirectUrl);
 
             if(!$isWritable) {
-                $form->setIsDisabled(true, EditorForm::BUTTON_SUBMIT);
                 $this->addWarning(self::TRANSLATION_ERROR_WRITABLE, array('path' => $path . ($name ? '/' . $name : '')));
             }
 
-            $translator = $this->getTranslator();
 
         }
 
@@ -1005,8 +954,6 @@ class FileBrowserController extends AbstractController
             'form' => $form->getView(),
 
         ));
-
-
 
     }
 
@@ -1016,8 +963,7 @@ class FileBrowserController extends AbstractController
      * root path of theor an array of filenames
      * @return null
      */
-    public function delete($files = null)
-    {
+    public function delete($files = null) {
 
         if($files == null) {
             return;
@@ -1029,11 +975,18 @@ class FileBrowserController extends AbstractController
 
         foreach($files as $file) {
 
-            $file = $this->fileBrowser->getRoot()->getChild($file);
+            if(!$this->path->isAbsolute()){
+                $path = $this->root->getChild($this->path);
+            }
+            else{
+                $path = $this->root;
+            }
 
+            $file = $path->getChild($file);
 
             try {
                 $file->delete();
+
             } catch(Exception $exception) {
                 $this->addError(self::TRANSLATION_ERROR_DELETED, array('error' => $exception->getMessage()));
             }
@@ -1046,8 +999,16 @@ class FileBrowserController extends AbstractController
             $this->addSuccess(self::TRANSLATION_SUCCESS_DELETED, array('path' => $path));
         }
 
-        $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]);
+        if($this->path->isAbsolute()){
+            $path = '';
+        }
+        else{
+            $path = $this->path;
+        }
+
+        $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . '/' . $path;
         $this->response->setRedirect($redirectUrl);
+
     }
 
     /**
@@ -1055,8 +1016,7 @@ class FileBrowserController extends AbstractController
      * @param array $files The files and directories to download
      * @return null
      */
-    public function archive(array $files = null)
-    {
+    public function archive(array $files = null) {
         if(!$files) {
             $this->response->setRedirect($this->getReferer());
 
@@ -1091,9 +1051,7 @@ class FileBrowserController extends AbstractController
      * @param array $files Array with relative paths
      * @return null
      */
-    public function clipboardAdd(array $files = null)
-    {
-
+    public function clipboardAdd(array $files = null) {
 
         if($files == null) {
             return;
@@ -1101,7 +1059,14 @@ class FileBrowserController extends AbstractController
 
         foreach($files as $file) {
 
-            $file = $this->fileBrowser->getRoot()->getChild($file);
+            if(!$this->path->isAbsolute()){
+                $path = $this->root->getChild($this->path);
+            }
+            else{
+                $path = $this->root;
+            }
+
+            $file = $path->getChild($file);
 
             if(!$file->exists()) {
                 continue;
@@ -1109,7 +1074,7 @@ class FileBrowserController extends AbstractController
 
             $file = $this->fileBrowser->getPath($file, false);
 
-            $this->clipboard[$file->getPath()] = $file;
+            $this->clipboard[$file->getName()] = $file;
         }
     }
 
@@ -1120,16 +1085,12 @@ class FileBrowserController extends AbstractController
      */
     public function clipboardRemove(array $files = null) {
 
-
         if($files == null) {
             return;
         }
 
         foreach($files as $file) {
-            //$file = new File($file);
-            $file = $this->getRoot()->getChild($file);
-            $file = $file->getName();
-           // $file = $file->getPath();
+
 
             if(array_key_exists($file, $this->clipboard)) {
                 unset($this->clipboard[$file]);
@@ -1145,8 +1106,7 @@ class FileBrowserController extends AbstractController
      * @param array $files Array with the files to copy
      * @return null
      */
-    public function clipboardCopy(array $files = null)
-    {
+    public function clipboardCopy(array $files = null) {
         $this->clipboardFileAction('copy', $files);
     }
 
@@ -1155,8 +1115,7 @@ class FileBrowserController extends AbstractController
      * @param array $files Array with the files to copy
      * @return null
      */
-    public function clipboardMove(array $files = null)
-    {
+    public function clipboardMove(array $files = null) {
         $this->clipboardFileAction('move', $files);
     }
 
@@ -1168,38 +1127,46 @@ class FileBrowserController extends AbstractController
      */
     private function clipboardFileAction($action, array $files = null) {
 
-        if($files == null) {
+        if ($files == null) {
             return;
         }
 
-        $root = $this->fileBrowser->getRoot();
-        //$baseDestination = new File($root, $this->path);
-        $baseDestination = $this->getRoot()->getChild($this->path);
+        foreach ($files as $file) {
 
+            if(!$this->path->isAbsolute()){
+                $path = $this->root->getChild($this->path);
+            }
+            else{
+                $path = $this->root;
+            }
 
-        foreach($files as $file) {
-            //$file = new File($file);
-            $file = $this->getRoot()->getPath($file);
-            $path = $file->getAbsolutePath();
+            $destination = $path->getChild($file);
 
-            if(!array_key_exists($path, $this->clipboard)) {
+            if (!array_key_exists($file, $this->clipboard)) {
                 continue;
             }
 
-            //  $source = new File($root, $file);
-            $source = $this->getRoot()->getPath($file, true);
-          //  $destination = new File($baseDestination, $file->getName());
-            $destination = $this->getRoot()->getPath($baseDestination, true);
-            if(!$destination->isWritable()) {
+
+            $source = $this->root->getChild($this->clipboard[$file]);
+
+
+            if (!$destination->isWritable()) {
                 $this->addError(self::TRANSLATION_ERROR_WRITABLE, array('path' => $this->fileBrowser->getPath($destination)));
                 continue;
             }
 
             $source->$action($destination);
 
-            unset($this->clipboard[$path]);
+            unset($this->clipboard[$file]);
         }
-        $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . ($path ? '/' . $path : '');
+
+        if($this->path->isAbsolute()){
+            $path = '';
+        }
+        else{
+            $path = $this->path;
+        }
+        $redirectUrl = $this->getUrl($this->routes[self::ROUTE_PATH]) . '/' . $path;
         $this->response->setRedirect($redirectUrl);
     }
 
@@ -1215,8 +1182,7 @@ class FileBrowserController extends AbstractController
      * @param string $orderDirection The order direction
      * @return pallo\filebrowser\table\BrowserTable
      */
-    private function getBrowserTable($action, File $path = null, $pathAction = null, $downloadAction = null, $renameAction = null, $editAction = null, $orderField = null, $orderDirection = null)
-    {
+    private function getBrowserTable($action, File $path = null, $pathAction = null, $downloadAction = null, $renameAction = null, $editAction = null, $orderField = null, $orderDirection = null) {
         if(is_null($path)) {
             $path = $this->root;
         }
@@ -1280,7 +1246,6 @@ class FileBrowserController extends AbstractController
      */
     private function getClipboardTable($action) {
         $clipboardTable = new ClipboardTable($action, $this->fileBrowser->getRoot(),$this->clipboard);
-        //$clipboardTable = new ClipboardTable($action, $this->fileBrowser->getRoot(), $this->clipboard);
         $clipboardTable->setId('table-clipboard');
 
         $translator = $this->getTranslator();
@@ -1302,8 +1267,7 @@ class FileBrowserController extends AbstractController
      * @param boolean $addRoot Flag to see if the root of the browser should be added
      * @return pallo\library\system\file\File The file object of the tokens
      */
-    private function getFileFromTokens(array $tokens, $addRoot = true)
-    {
+    private function getFileFromTokens(array $tokens, $addRoot = true) {
         if(empty($tokens)) {
             return null;
         }
