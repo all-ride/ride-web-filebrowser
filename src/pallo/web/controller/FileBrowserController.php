@@ -908,9 +908,9 @@ class FileBrowserController extends AbstractController {
                     $newfile  = $file->getChild($name);
                     $newfile->write($content);
                     $this->addSuccess(self::TRANSLATION_CREATE_FILE, array('path' => $this->fileBrowser->getPath($file, false)));
-
+                    $path = '';
                     foreach($tokens as $token){
-                        $path = $token .'/';
+                        $path .= $token .'/';
                     }
                 }
 
@@ -918,9 +918,10 @@ class FileBrowserController extends AbstractController {
                     $file->write($content);
                     $this->addSuccess(self::TRANSLATION_SUCCESS_SAVED, array('path' => $this->fileBrowser->getPath($file, false)));
 
+                   $path = '';
                    array_pop($tokens);
                    foreach($tokens as $token){
-                       $path = $token .'/';
+                       $path .= $token .'/';
                    }
                 }
                 else {
