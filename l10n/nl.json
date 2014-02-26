@@ -1,0 +1,50 @@
+{
+    "filebrowser.button.create.directory" : "Maak nieuwe folder",
+    "filebrowser.button.create.file" : "Maak nieuwe file",
+    "filebrowser.button.create" : "Maak",
+    "filebrowser.button.copy" : "Kopieer",
+    "filebrowser.button.copy.clipboard" : "Kopieer naar clipboard",
+    "filebrowser.button.delete" : "Verwijder",
+    "filebrowser.button.download.archive" : "Download als Archief",
+    "filebrowser.button.move" : "Verplaats",
+    "filebrowser.button.remove.clipboard" : "Verwijder van clipboard",
+    "filebrowser.button.rename" : "Hernoem",
+    "filebrowser.button.upload" : "Upload",
+
+    "filebrowser.description" : "<p>Browse through the files on your webserver. Be careful with the files you change, some are needed for core functionality.</p>",
+
+    "filebrowser.error.exist" : "%path% Bestaat al",
+    "filebrowser.error.exist.not" : "%path% bestaat niet",
+    "filebrowser.error.writable" : "%path% is niet schrijfbaar",
+    "filebrowser.error.path.file" : "Kan niet veranderen naar %path%: dit path is een bestand",
+    "filebrowser.error.deleted" : "Kan path niet verwijderen %path%: %error%",
+
+    "filebrowser.title" : "File Browser",
+    "filebrowser.title.clipboard" : "Clipboard",
+    "filebrowser.title.create.directory" : "Maak nieuwe directory",
+    "filebrowser.title.editor" : "Editor",
+    "filebrowser.title.rename" : "Hernoemen",
+    "filebrowser.title.upload" : "Upload een bestand",
+
+    "filebrowser.information.created" : "%path% is gemaakt",
+    "filebrowser.information.renamed" : "%old% is hernoemt naar %new%",
+    "filebrowser.information.saved" : "%path% is opgeslagen",
+    "filebrowser.information.uploaded" : "%path% is geupload",
+    "filebrowser.information.deleted" : "%path% is verwijderd",
+
+    "filebrowser.label.content" : "Inhoud",
+    "filebrowser.label.clipboard.empty" : "Uw clipboard is leeg",
+    "filebrowser.label.delete.confirm" : "Bent U zeker dat u de geselecteerde items wilt verwijderen?",
+    "filebrowser.label.directory.empty" : "Er zijn geen bestanden in deze folder",
+    "filebrowser.label.extension" : "Extension",
+    "filebrowser.label.file" : "Bestand",
+    "filebrowser.label.files" : "Bestanden",
+    "filebrowser.label.name" : "Naam",
+    "filebrowser.label.name.new" : "Nieuwe naam",
+    "filebrowser.label.navigation.home" : "home",
+    "filebrowser.label.path" : "Path",
+    "filebrowser.label.size" : "Grootte",
+    "filebrowser.label.subdirectories" : "Subdirectories",
+
+    "label.table.order" : "Rangschik volgens"
+}

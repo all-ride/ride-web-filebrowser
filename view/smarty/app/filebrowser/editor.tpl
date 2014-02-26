@@ -2,7 +2,7 @@
 
 {block name="content" append}
     <div class="page-header">
-        <h1>Filebrowser <small>File editor</small></h1>
+        <h1>{translate key="filebrowser.title.editor"} <small>File editor</small></h1>
     </div>
     {include file = "base/form.prototype"}
     <form id="{$form->getId()}" class="form-horizontal" method="post" action="{$app.url.request}" role="form">

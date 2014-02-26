@@ -2,7 +2,7 @@
 
 {block name="content" append}
     <div class="page-header">
-        <h1>Filebrowser <small>Create a new directory</small></h1>
+        <h1>{translate key="filebrowser.title.create"}<small>Create a new directory</small></h1>
     </div>
     {include file = "base/form.prototype"}
 

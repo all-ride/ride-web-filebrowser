@@ -2,7 +2,7 @@
 
 {block name="content" append}
     <div class="page-header">
-    <h1>Filebrowser <small>Rename</small></h1>
+    <h1>{translate key="filebrowser.title.rename"} <small>Rename</small></h1>
     </div>
     {include file = "base/form.prototype"}
 

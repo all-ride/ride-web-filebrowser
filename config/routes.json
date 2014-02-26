@@ -2,7 +2,7 @@
     "routes": [
         {
             "path": "/filebrowser",
-            "controller": "pallo\\web\\controller\\FileBrowserController",
+            "controller": "ride\\web\\controller\\FileBrowserController",
             "action": "indexAction",
             "methods": [
                 "head",
@@ -12,7 +12,7 @@
         },
         {
             "path": "/filebrowser/path",
-            "controller": "pallo\\web\\controller\\FileBrowserController",
+            "controller": "ride\\web\\controller\\FileBrowserController",
             "action": "pathAction",
             "methods": [ "head","post","get"],
             "dynamic": "true",
@@ -20,7 +20,7 @@
         },
         {
             "path": "/filebrowser/download",
-            "controller": "pallo\\web\\controller\\FileBrowserController",
+            "controller": "ride\\web\\controller\\FileBrowserController",
             "action": "downloadAction",
             "methods": ["head","get"],
             "dynamic": "true",
@@ -28,7 +28,7 @@
         },
         {
             "path": "/filebrowser/create",
-            "controller": "pallo\\web\\controller\\FileBrowserController",
+            "controller": "ride\\web\\controller\\FileBrowserController",
             "action": "createAction",
             "methods": ["head","get","post"],
             "dynamic": "true",
@@ -36,7 +36,7 @@
         },
         {
             "path": "/filebrowser/edit",
-            "controller": "pallo\\web\\controller\\FileBrowserController",
+            "controller": "ride\\web\\controller\\FileBrowserController",
             "action": "editAction",
             "methods": ["head","get","post"],
             "dynamic": "true",
@@ -44,7 +44,7 @@
         },
         {
             "path": "/filebrowser/rename",
-            "controller": "pallo\\web\\controller\\FileBrowserController",
+            "controller": "ride\\web\\controller\\FileBrowserController",
             "action": "renameAction",
             "methods": ["head","get","post"],
             "dynamic": "true",

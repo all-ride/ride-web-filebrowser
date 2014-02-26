@@ -1,8 +1,8 @@
 {
-    "name": "pallo/app.filebrowser",
-    "description": "Zibo module to add a file browser to your application.",
+    "name": "ride/app.filebrowser",
+    "description": "Ride module to add a file browser to your application.",
     "version": "0.7.0",
-    "type": "pallo-module",
+    "type": "ride-module",
     "authors": [
         {
             "name": "Joris Vandeweerd",
@@ -10,16 +10,16 @@
         }
     ],
     "require": {
-        "zibo/app": "*",
-        "zibo/composer.installer": "*",
-        "zibo/core": "*",
-        "zibo/html": "*",
-        "zibo/i18n": "*",
-        "zibo/jquery": "*",
-        "zibo/template": "*",
-        "zibo/validation": "*"
+        "ride/app": "*",
+        "ride/composer.installer": "*",
+        "ride/core": "*",
+        "ride/html": "*",
+        "rode/i18n": "*",
+        "ride/jquery": "*",
+        "ride/template": "*",
+        "ride/validation": "*"
     },
     "suggest": {
-        "zibo/archive": "Download directory contents as archives."
+        "ride/archive": "Download directory contents as archives."
     }
 }
