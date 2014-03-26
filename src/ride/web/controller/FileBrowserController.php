@@ -28,6 +28,7 @@ use ride\library\String;
 use ride\web\base\controller\AbstractController;
 
 use \Exception;
+use ride\web\table\filebrowser\decorator\ImageActionDecorator;
 
 /**
  * Controller of the file browser application
@@ -52,6 +53,11 @@ class FileBrowserController extends AbstractController {
      */
     const ROUTE_EDIT = 'filebrowser.edit';
 
+    /**
+     * Route to edit image
+     * @var string
+     */
+    const ROUTE_IMAGE = 'imgedit';
     /**
      * Route to view a path
      * @var string
@@ -559,7 +565,7 @@ class FileBrowserController extends AbstractController {
 
             } catch(ValidationException $exception) {
                 $this->response->setStatusCode(Response::STATUS_CODE_UNPROCESSABLE_ENTITY);
-                $this->addError('error.validation');
+                $this->addError('error.validation.');
             }
 
 
@@ -604,6 +610,8 @@ class FileBrowserController extends AbstractController {
         }
 
         $view = $this->setTemplateView('app/filebrowser/browser', $variables );
+
+
 
 
         if(!$absolutePath->isWritable()) {
@@ -766,28 +774,21 @@ class FileBrowserController extends AbstractController {
         $form = $form->build();
 
 
-        $view = $this->setTemplateView('app/filebrowser/rename', array(
-            'form' => $form->getView(),
-        ));
-
         if($form->isSubmitted()) {
 
             try {
                 $form->validate();
 
-
                 $dataform = $form->getData();
-
-                echo 'submit';
 
                 $name = $dataform['newvalue'];
                 $destination = $parent->getChild($dataform['newvalue']);
 
-                if($destination->getAbsolutePath() != $absoluteFile->getPath() && $destination->exists()) {
+            /*    if($destination->getAbsolutePath() != $absoluteFile->getPath() && $destination->exists()) {
                     $error = new ValidationError(self::TRANSLATION_ERROR_EXIST, '%path% exists already', array('path' => $this->fileBrowser->getPath($destination, false)));
                     $exception = new ValidationException();
                     throw $exception;
-                }
+                }*/
 
                 $absoluteFile->move($destination);
 
@@ -816,6 +817,10 @@ class FileBrowserController extends AbstractController {
         }
 
         $translator = $this->getTranslator();
+
+        $this->setTemplateView('app/filebrowser/rename', array(
+            'form' => $form->getView(),
+        ));
     }
     /**
      * Action to edit or create a file
@@ -874,7 +879,7 @@ class FileBrowserController extends AbstractController {
             'path' => $absolutePath,
         ));
 
-        $form->addRow('name', 'string', array(
+        $form->addRow('name', 'label', array(
             'type' => 'label',
             'options' => array(
                 'path' => $absolutePath
@@ -1171,7 +1176,7 @@ class FileBrowserController extends AbstractController {
      * @param string $orderDirection The order direction
      * @return ride\filebrowser\table\BrowserTable
      */
-    private function getBrowserTable($action, File $path = null, $pathAction = null, $downloadAction = null, $renameAction = null, $editAction = null, $orderField = null, $orderDirection = null) {
+    private function getBrowserTable($action, File $path = null, $pathAction = null, $downloadAction = null, $renameAction = null, $editAction = null, $orderField = null, $orderDirection = null, $imageAction = null) {
         if(is_null($path)) {
             $path = $this->root;
         }

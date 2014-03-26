@@ -49,6 +49,7 @@
         </form>
     </div>
 
+
     <div class="clipboard">
         <legend>{translate key="filebrowser.title.clipboard"}</legend>
         {if $clipboard}

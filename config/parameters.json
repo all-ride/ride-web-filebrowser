@@ -12,5 +12,6 @@
         "tpl": "tpl",
         "txt": "txt",
         "xml": "xml"
-    }
+    },
+    "filebrowser.image.edit": "true"
 }
